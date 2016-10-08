@@ -22,6 +22,8 @@ export default class Injectable {
             throw new InvalidArgumentError("Argument 'name' must be a string and must have length.");
         if(!_.isFunction(loader))
             throw new InvalidArgumentError("Argument 'loader' must be a function.");
+        if(options.constructor !== Object || options === undefined)
+            throw new InvalidArgumentError("Argument 'options' must be an object.");
 
         let mergedOptions = Object.assign(DEFAULT_OPTIONS, options);
         this.validateOptionsObject(mergedOptions);
@@ -40,7 +42,17 @@ export default class Injectable {
      * @return {String|Array} Array of dependencies.
      */
     parseFunctionArguments(func) {
+        if(func.hasOwnProperty("@require")) {
+            this.validateRequireProp(func["@require"]);
+            return func["@require"];
+        }
+
         return getFunctionArgumentNames(func);
+    }
+
+    validateRequireProp(prop) {
+        if(!_.isArray(prop))
+            throw new InvalidArgumentError(`@require should be an array only at injectable "${this.name}".`);
     }
 
     /**
@@ -83,5 +95,9 @@ export default class Injectable {
              first via the container.`);
 
         return this.instance;
+    }
+
+    hasInstance() {
+        return this.instance.constructor !== NoInstance;
     }
 }

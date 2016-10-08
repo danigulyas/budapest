@@ -27,6 +27,26 @@ export default class Container {
     }
 
     /**
+     * Returns a filtered list of dependencies of injectable.
+     * @param {Injectable} injectable
+     * @return {String|Array} filtered dependencies
+     */
+    getFilteredDependenciesOfInjectable(injectable) {
+        return injectable.dependencies
+            .filter((argumentName) => !EXCLUDED_ARGUMENT_NAMES.includes(argumentName));
+    }
+
+    /**
+     * Creates dependencies of injectable.
+     * @param {Injectable} injectable
+     * @return {Array} Instances of dependencies.
+     */
+    createDependenciesOfInjectable(injectable) {
+        return this.getFilteredDependenciesOfInjectable(injectable)
+            .map((nameOfInjectableDependency) => this.create(nameOfInjectableDependency));
+    }
+
+    /**
      * Create an injectable and return it.
      * @param injectableName Name of the injectable.
      * @return {Object} Returns the result of the injectable's loader function.
@@ -36,10 +56,9 @@ export default class Container {
             throw new InvalidArgumentError(`Couldn't find "${injectableName}" as a registered injectable in the container.`);
 
         let injectable = this.injectables.get(injectableName);
-        let dependenciesOfInjectable = injectable.dependencies
-            .filter((argumentName) => !EXCLUDED_ARGUMENT_NAMES.includes(argumentName));
+        if(injectable.isSingleton() && injectable.hasInstance()) return injectable.getInstance();
 
-        dependenciesOfInjectable.map((injectable) => this.create(injectable.name));
+        var dependenciesOfInjectable = this.createDependenciesOfInjectable(injectable);
 
         try {
             var instance = injectable.loader(...dependenciesOfInjectable);
@@ -47,7 +66,6 @@ export default class Container {
             throw new InjectableLoaderError(exception);
         }
 
-        // this.injectables.set(injectableName, injectable);
         injectable.registerInstance(instance);
         return injectable.getInstance();
     }
