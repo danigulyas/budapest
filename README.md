@@ -1,7 +1,7 @@
-# budapest
+# Budapest
 Annotation driven DI in an IoC fashion for javascript.
 
-So, you want to use proper DI and IoC, but you don't want to write hand-typed configurations and such, welcome to the club.
+So, you want to use proper DI and IoC, but you don't want to write hand-typed configurations and such, neither do shady tricks, welcome to the club.
 
 ### How it would look like?
 From the code aspect it's pretty much a simple, naive IoC container, from the end-user aspect it would look like this:
@@ -62,3 +62,10 @@ Recursively creates the dependencies of the injectable and returns the instance 
 
 ##### `@injectable(name, dependencies, options)` - Registers an injectable in the container via the annotation (partially done).
 There's a bit of a work to be done, also there's await for an annotation babel plugin.
+
+
+
+### Ideas and all
+Please, open an issue / drop me a line at [hello@danielgulyas.me](hello@danielgulyas.me).
+
+Cheers, have a nice day!:)
