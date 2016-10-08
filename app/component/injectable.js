@@ -17,7 +17,7 @@ const VALID_OPTIONS_PARAMETERS = ["singleton"];
  * - Have a name
  */
 export default class Injectable {
-    constructor(name = "", loader, options = {}) {
+    constructor(name = "", loader, dependencies = null, options = {}) {
         if(!name.length)
             throw new InvalidArgumentError("Argument 'name' must be a string and must have length.");
         if(!_.isFunction(loader))
@@ -33,7 +33,12 @@ export default class Injectable {
         this.options = options;
         this.instance = new NoInstance();
 
-        this.dependencies = this.parseFunctionArguments(loader);
+        if(dependencies !== null) {
+            this.validateDependenciesArgument(dependencies);
+            this.dependencies = dependencies;
+        } else {
+            this.dependencies = this.parseFunctionArguments(loader);
+        }
     }
 
     /**
@@ -42,16 +47,11 @@ export default class Injectable {
      * @return {String|Array} Array of dependencies.
      */
     parseFunctionArguments(func) {
-        if(func.hasOwnProperty("@require")) {
-            this.validateRequireProp(func["@require"]);
-            return func["@require"];
-        }
-
         return getFunctionArgumentNames(func);
     }
 
-    validateRequireProp(prop) {
-        if(!_.isArray(prop))
+    validateDependenciesArgument(dependenciesArg) {
+        if(!_.isArray(dependenciesArg))
             throw new InvalidArgumentError(`@require should be an array only at injectable "${this.name}".`);
     }
 

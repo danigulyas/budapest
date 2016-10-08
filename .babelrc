@@ -1,4 +1,4 @@
 {
   "presets": ["es2015"],
-  "plugins": ["source-map-support/register"]
+  "plugins": ["source-map-support/register", "transform-decorators-legacy"]
 }
