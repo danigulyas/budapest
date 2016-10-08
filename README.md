@@ -64,6 +64,10 @@ Recursively creates the dependencies of the injectable and returns the instance 
 There's a bit of a work to be done, also there's await for an annotation babel plugin.
 
 
+### What else?
+
+Well, it would be really nice to create an async di, so one can create components async,
+with promises maybe, but these are ideas only. :)
 
 ### Ideas and all
 Please, open an issue / drop me a line at [hello@danielgulyas.me](hello@danielgulyas.me).
