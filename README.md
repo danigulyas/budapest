@@ -42,7 +42,7 @@ container.create("logger");
 Inside the package there's a singleton container and and annotation exposed,
 by calling the annotation on a class it analyzes it's arguments
 based on their name in the constructor function (this is overrideable by passing them
-in at the annotation, eg `@injectable("logger", ["configuration"]`)).
+in at the annotation, eg `@injectable("logger", ["configuration"])`).
 
 Sadly, currently there's no option to annotate functions, which could be in fact,
 really helpful with instantiating things, instead of the java-ish configuration classes.
