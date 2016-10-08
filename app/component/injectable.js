@@ -2,6 +2,7 @@ import InvalidArgumentError from "../error/InvalidArgumentError";
 import {getFunctionArgumentNames, NoInstance} from "../util";
 import _ from "lodash";
 
+const DEFAULT_OPTIONS = {singleton: false};
 const VALID_OPTIONS_PARAMETERS = ["singleton"];
 
 /**
@@ -15,14 +16,15 @@ const VALID_OPTIONS_PARAMETERS = ["singleton"];
  * - Be a function / class constructor
  * - Have a name
  */
-class Injectable {
-    constructor(name, loader, options = {singleton: false}) {
+export default class Injectable {
+    constructor(name = "", loader, options = {}) {
         if(!name.length)
             throw new InvalidArgumentError("Argument 'name' must be a string and must have length.");
         if(!_.isFunction(loader))
             throw new InvalidArgumentError("Argument 'loader' must be a function.");
 
-        this.validateOptionsObject(options);
+        let mergedOptions = Object.assign(DEFAULT_OPTIONS, options);
+        this.validateOptionsObject(mergedOptions);
 
         this.name = name;
         this.loader = loader;
@@ -46,8 +48,8 @@ class Injectable {
      * @param {Object} options
      */
     validateOptionsObject(options) {
-        options.keys().forEach((key) => {
-            if(!(key in VALID_OPTIONS_PARAMETERS))
+        _.keys(options).forEach((key) => {
+            if(VALID_OPTIONS_PARAMETERS.indexOf(key) === -1)
                 throw new InvalidArgumentError(`Key "${key}" is not valid in the arguments.`);
         });
     }
