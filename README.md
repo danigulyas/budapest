@@ -19,7 +19,7 @@ export default LoggerConfiguration;
 ```
 
 `logger.js`
-```
+```javascript
 import {injectable} from "budapest";
 
 @injectable("logger")
@@ -33,35 +33,35 @@ export default ConfigureLogger
 ```
 
 `index.js`
-```
+```javascript
 import {container} from "budapest";
 
 container.create("logger");
 ```
 
 Inside the package there's a singleton container and and annotation exposed,
-by calling the annotation on a function or class it analyzes it's arguments
-based on their name in the function header (this is overrideable by passing them
+by calling the annotation on a class it analyzes it's arguments
+based on their name in the constructor function (this is overrideable by passing them
 in at the annotation, eg `@injectable("logger", ["configuration"]`)).
 
 Sadly, currently there's no option to annotate functions, which could be in fact,
 really helpful with instantiating things, instead of the java-ish configuration classes.
 
-### Proposal of API main parts
+### Proposal of API, main parts
 
-This is just a brief synopsis of the main api part, please check the code for in-depth details.
+This is just a brief synopsis of the main api parts, please check the code for more in-depth details.
 
 #### Container
 
-##### `.create(injectableName)` - Create an Injectable (done)
-Recursively creates the dependencies of the injectable and returns the instance of the injectable itself.
+##### `.create(injectableName)` - Create an instance out of an injectable (done)
+Recursively creates the dependencies of the injectable and returns the instance of the injectable itself (see loader at Injectable, it's what the class constructor returns now basically).
 
-##### `.registerInjectable(Injectable)` - Registers an injectable in hte container. (done)
+##### `.registerInjectable(Injectable)` - Registers an injectable in the container. (done)
 
 #### Annotations
 
 ##### `@injectable(name, dependencies, options)` - Registers an injectable in the container via the annotation (partially done).
-There's a bit of a work to be done, also there's await for an annotation babel plugin.
+There's a bit of a work to be done, also there's await for annotations for functions and a finalised transpiler plugin.
 
 
 ### What else?
